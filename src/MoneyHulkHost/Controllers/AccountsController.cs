@@ -19,37 +19,36 @@ namespace MoneyHulkHost.Controllers
             _context = context;
         }
 
-        // GET: api/values
+        // GET: api/accounts
         [HttpGet]
         public IEnumerable<Account> Get() => _context.Accounts;
 
-        // GET api/values/5
+        // GET api/accounts/5
         [HttpGet("{id}")]
         public Account Get(int id) => _context.Accounts.First(a => a.AccountId == id);
 
-        // POST api/values
+        // POST api/accounts
         [HttpPost]
-        public async Task<Account> Post([FromBody]string name)
+        public async Task<Account> Post([FromBody]Account account)
         {
-            var account = new Account
+            if (account.AccountId != 0)
             {
-                Name = name
-                
-            };
+                throw new Exception(); // FIXME use proper exception.
+            }
 
             _context.Accounts.Add(account);
             await _context.SaveChangesAsync();
             return account;
         }
 
-        // PUT api/values/5
+        // PUT api/accounts/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {
             var account = _context.Accounts.First(a => a.AccountId == id);
         }
 
-        // DELETE api/values/5
+        // DELETE api/accounts/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

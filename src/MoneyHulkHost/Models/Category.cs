@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MoneyHulkHost.Models
 {
-
     public class Category
     {
         [Required]

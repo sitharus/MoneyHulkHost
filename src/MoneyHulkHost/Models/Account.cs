@@ -20,6 +20,9 @@ namespace MoneyHulkHost.Models
         [StringLength(100), Required]
         public string Name { get; set; }
 
+        [StringLength(50)]
+        public string Number { get; set; }
+
         [StringLength(1000)]
         public string Description { get; set; }
 

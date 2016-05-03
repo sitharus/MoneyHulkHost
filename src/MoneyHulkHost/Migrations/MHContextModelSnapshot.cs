@@ -29,6 +29,9 @@ namespace MoneyHulkHost.Migrations
                         .IsRequired()
                         .HasAnnotation("MaxLength", 100);
 
+                    b.Property<string>("Number")
+                        .HasAnnotation("MaxLength", 50);
+
                     b.HasKey("AccountId");
                 });
 
@@ -75,6 +78,9 @@ namespace MoneyHulkHost.Migrations
                         .HasAnnotation("MaxLength", 100);
 
                     b.HasKey("CategoryId");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
                 });
 
             modelBuilder.Entity("MoneyHulkHost.Models.Import", b =>

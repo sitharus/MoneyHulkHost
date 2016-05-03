@@ -8,8 +8,8 @@ using MoneyHulkHost.Models;
 namespace MoneyHulkHost.Migrations
 {
     [DbContext(typeof(MHContext))]
-    [Migration("20151125072944_Initial")]
-    partial class Initial
+    [Migration("20160307071435_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,6 +29,9 @@ namespace MoneyHulkHost.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasAnnotation("MaxLength", 100);
+
+                    b.Property<string>("Number")
+                        .HasAnnotation("MaxLength", 50);
 
                     b.HasKey("AccountId");
                 });
@@ -76,6 +79,9 @@ namespace MoneyHulkHost.Migrations
                         .HasAnnotation("MaxLength", 100);
 
                     b.HasKey("CategoryId");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
                 });
 
             modelBuilder.Entity("MoneyHulkHost.Models.Import", b =>

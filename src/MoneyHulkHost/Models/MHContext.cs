@@ -15,6 +15,8 @@ namespace MoneyHulkHost.Models
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity(typeof(Category)).HasOne(typeof(Budget)).WithOne();
+            modelBuilder.
+                Entity(typeof(Category)).HasIndex("Name").IsUnique(true);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

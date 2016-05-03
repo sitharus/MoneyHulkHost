@@ -4,7 +4,7 @@ using Microsoft.Data.Entity.Migrations;
 
 namespace MoneyHulkHost.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,7 +16,8 @@ namespace MoneyHulkHost.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Description = table.Column<string>(nullable: true),
                     Kind = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: false)
+                    Name = table.Column<string>(nullable: false),
+                    Number = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -130,6 +131,11 @@ namespace MoneyHulkHost.Migrations
                         principalColumn: "ImportId",
                         onDelete: ReferentialAction.Restrict);
                 });
+            migrationBuilder.CreateIndex(
+                name: "IX_Category_Name",
+                table: "Category",
+                column: "Name",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
