@@ -5,14 +5,29 @@ using System.Threading.Tasks;
 
 namespace FileParsers
 {
+    public class InvalidQIFException : Exception
+    {
+
+    }
+
+    public class UnsupportedQIFTypeExecption : Exception
+    {
+        public string Type { get; }
+
+        public UnsupportedQIFTypeExecption(string type)
+        {
+            Type = type;
+        }
+    }
+    public class Transaction
+    {
+        public DateTime Date { get; internal set; }
+        public string Memo { get; internal set; }
+        public decimal Amount { get; internal set; }
+    }
+
     public class QIF
     {
-        class Transaction
-        {
-            public DateTime Date { get; internal set; }
-            public string Memo { get; internal set; }
-            public decimal Amount { get; internal set; }
-        }
 
         public static async Task<QIF> Parse(Stream input)
         {
@@ -36,7 +51,7 @@ namespace FileParsers
         List<Transaction> _Transactions = new List<Transaction>(200);
         Transaction _CurrentTransaction = new Transaction();
 
-        IReadOnlyCollection<Transaction> Transactions => Transactions;
+        public IReadOnlyCollection<Transaction> Transactions => _Transactions;
 
 
         QIF()
@@ -50,14 +65,23 @@ namespace FileParsers
                 while (!reader.EndOfStream)
                 {
                     var line = await reader.ReadLineAsync();
+                    if (line.Length == 0)
+                    {
+                        continue; // TODO Find out if this is valid in a real QIF
+                    }
+
+                    if (Type == null)
+                    {
+                        if (line != "!Type:Bank")
+                        {
+                            throw new UnsupportedQIFTypeExecption(line);
+                        }
+                        Type = "Bank"; // Only support banks for now.
+                        continue;
+                    }
+
                     switch (line[0])
                     {
-                        case '!':
-                            if (line != "!Type:Bank")
-                            {
-                                throw new NotImplementedException();
-                            }
-                            break;
                         case '^':
                             _Transactions.Add(_CurrentTransaction);
                             _CurrentTransaction = new Transaction();
@@ -71,7 +95,8 @@ namespace FileParsers
                         case 'T':
                             _CurrentTransaction.Amount = decimal.Parse(line.Substring(1).Replace(",", ""));
                             break;
-                        default: break;
+                        default:
+                            throw new InvalidQIFException();
 
                     }
                     
